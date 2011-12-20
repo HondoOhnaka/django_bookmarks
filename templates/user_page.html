@@ -1,0 +1,20 @@
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>Django Bookmarks - User: {{ username }}</title>
+	
+</head>
+<body>
+	<h1>Bookmarks for {{ username }}</h1>
+	{% if bookmarks %}
+	<ul>
+		{% for bookmark in bookmarks %}
+		<li><a href="http://{{ bookmark.link.url }}">
+			{{ bookmark.title }}</a></li>
+		{% endfor %}
+	</ul>
+	{% else %}
+	<p>No bookmarks found.</p>
+	{% endif %}
+</body>
+</html>
