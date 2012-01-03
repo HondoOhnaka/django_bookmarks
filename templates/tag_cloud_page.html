@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Tag Cloud{% endblock title %}
+{% block head %}Tag Cloud{% endblock head %}
+
+{% block content %}
+<div id="tag-cloud">
+	{% for tag in tags %}
+		<a href="/tag/{{tag.name }}/" class="tag-cloud-{{tag.weight }}">
+			{{ tag.name }}
+			</a>
+	{% endfor %}	
+</div>
+{% endblock %}
