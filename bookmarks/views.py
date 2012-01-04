@@ -113,7 +113,6 @@ def bookmark_save_page(request):
       variables
     )
 def _bookmark_save(request, form):
-	print "I got to the bookmmark_save method"
   # Create or get link.
 	link, dummy = Link.objects.get_or_create(
     url=form.cleaned_data['url']
@@ -196,4 +195,10 @@ def search_page(request):
 	    return render_to_response('bookmark_list.html', variables)
 	else:
 	    return render_to_response('search.html', variables)
-				
+
+def ajax_tag_autocomplete(request):
+	if 'q' in request.GET:
+		tags = Tag.objects.filter(
+			name__istartswith=request.GET['q'])[:10]
+		return HttpResponse(u'\n'.join(tag.name for tag in tags))
+	return HttpResponse()

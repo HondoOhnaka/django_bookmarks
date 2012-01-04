@@ -1,10 +1,13 @@
 {% extends "base.html" %}
+{% block external %}
+<link rel="stylesheet" href="/site_media/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="/site_media/dimensions.js"></script>
+<script type="text/javascript" src="/site_media/jquery.bgiframe.min.js"></script>
+<script type="text/javascript" src="/site_media/jquery.autocomplete.js"></script>
+<script type="text/javascript" src="/site_media/tag_autocomplete.js"></script>
+{% endblock external %}
 {% block title %}Save Bookmark{% endblock %}
 {% block head %}SaveBookmark{% endblock head %}
 {% block content %}
-<form method="post" action=".">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<input type="submit" value="save" id="submit">
-</form>
+{% include "bookmark_save_form.html" %}
 {% endblock content %}
