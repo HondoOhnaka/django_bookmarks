@@ -2,7 +2,7 @@
 <ul class="bookmarks">
 	{% for bookmark in bookmarks %}
 		<li>
-		<a href="http://{{ bookmark.link.url }}" class="title">
+		<a href="{{ bookmark.link.url }}" class="title">
 			{{ bookmark.title }}</a>
 		<br />
 		{% if show_tags %}
