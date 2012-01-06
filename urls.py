@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     
     #account management
     (r'^save/$', bookmark_save_page),
+    (r'^vote/$', bookmark_vote_page),
     
     #site media
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
