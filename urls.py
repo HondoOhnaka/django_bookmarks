@@ -10,6 +10,7 @@ site_media = os.path.join(
 urlpatterns = patterns('', 
     #browsing
     (r'^$', main_page),
+		(r'^popular/$', popular_page),
     (r'^user/(\w+)/$', user_page),
     (r'^tag/([^\s]+)/$', tag_page),
     (r'^tag/$', tag_cloud_page),
@@ -34,5 +35,8 @@ urlpatterns = patterns('',
     #site media
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': site_media}),
+
+		#comments
+		(r'^comments/', include('django.contrib.comments.urls')),
     
 )

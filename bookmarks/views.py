@@ -10,6 +10,7 @@ from bookmarks.forms import *
 from bookmarks.models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
+from datetime import datetime, timedelta
 
 def main_page(request):
     shared_bookmarks = SharedBookmark.objects.order_by('-date')[:10]
@@ -235,3 +236,14 @@ def bookmark_vote_page(request):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     return HttpResponseREdirect('/')
     
+def popular_page(request):
+	today = datetime.today()
+	yesterday = today - timedelta(1)
+	shared_bookmarks = SharedBookmark.objects.filter(
+		date__gt=yesterday
+	)
+	shared_bookmarks = shared_bookmarks.order_by('-votes')[:10]
+	variables = RequestContext(request, {
+		'shared_bookmarks': shared_bookmarks
+	})
+	return render_to_response('popular_page.html', variables)
