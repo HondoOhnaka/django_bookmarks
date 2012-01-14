@@ -2,6 +2,9 @@ from django.conf.urls.defaults import *
 from bookmarks.views import *
 from django.views.generic.simple import direct_to_template
 import os
+from django.contrib import admin
+
+admin.autodiscover()
 
 site_media = os.path.join(
     os.path.dirname(__file__), 'site_media'
@@ -16,6 +19,11 @@ urlpatterns = patterns('',
     (r'^tag/$', tag_cloud_page),
 	(r'^search/$', search_page),
 	(r'^bookmark/(\d+)/$', bookmark_page),
+	
+	# Admin interface (chap 8)
+	# (r'^admin/(.*)', admin.site.root),
+	# fixed via         stackoverflow.com/questions/5503616/how-to-correct-this-error-adminsite-object-has-no-attribute-root
+	url(r'^admin/', include(admin.site.urls)),
 		
 	#Ajax
 	(r'^ajax/tag/autocomplete/$', ajax_tag_autocomplete),
@@ -37,7 +45,7 @@ urlpatterns = patterns('',
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root': site_media}),
 
-	#comments
+	# comments (chap 7)
 	(r'^comments/', include('django.contrib.comments.urls')),
     
 )

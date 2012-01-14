@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class Link(models.Model):
     url = models.URLField(unique=True)
     def __unicode__(self):
-        return self.name
+        return self.url
 
 class Bookmark(models.Model):
     title = models.CharField(max_length=200)
