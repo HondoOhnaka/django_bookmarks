@@ -22,3 +22,11 @@ ul.tags, ul.tags li {
 .tag-cloud-5 { font-size: 200%; }
 
 ul.bookmarks .edit { font-size: 70%; }
+
+/* commenting */
+textarea { display: block; }
+.comment { 
+    margin: 1em;
+    padding: 5px; 
+    border: 1px solid #000;
+}
