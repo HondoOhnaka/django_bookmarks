@@ -3,12 +3,17 @@ from bookmarks.views import *
 from django.views.generic.simple import direct_to_template
 import os
 from django.contrib import admin
+from bookmarks.feeds import *
 
 admin.autodiscover()
 
 site_media = os.path.join(
     os.path.dirname(__file__), 'site_media'
     )
+    
+# Add the feeds dict before the urlpattern object
+
+feeds = { 'recent': RecentBookmarks, 'user': UserBookmarks }
 
 urlpatterns = patterns('', 
     #browsing
@@ -47,5 +52,9 @@ urlpatterns = patterns('',
 
 	# comments (chap 7)
 	(r'^comments/', include('django.contrib.comments.urls')),
+	
+	# feeds (chapter 9)
+	(r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', 
+	    {'feed_dict': feeds}),
     
 )

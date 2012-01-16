@@ -11,6 +11,7 @@ from bookmarks.models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
+from django.db.models import Q
 
 def main_page(request):
     shared_bookmarks = SharedBookmark.objects.order_by('-date')[:10]
@@ -193,9 +194,13 @@ def search_page(request):
 		show_results = True
 		query = request.GET['query'].strip()
 		if query:
-			form = SearchForm({'query': query})
-			bookmarks = Bookmark.objects.filter(
-			title__icontains = query)[:10]
+			keywords = query.split()
+			q = Q()
+			for keyword in keywords:
+			    q = q & Q(title__icontains=keyword)
+			form = SearchForm({'query' : query})
+			bookmarks = Bookmark.objects.filter(q)[:10]
+			    
 	variables = RequestContext(request, {
 		'form': form,
 		'bookmarks': bookmarks,
@@ -203,7 +208,7 @@ def search_page(request):
 		'show_tags': True,
 		'show_user': True
 		})
-	if request.GET.has_key('ajax'):
+	if 'ajax' in request.GET:
 	    return render_to_response('bookmark_list.html', variables)
 	else:
 	    return render_to_response('search.html', variables)
