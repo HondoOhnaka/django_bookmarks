@@ -12,9 +12,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from django.db.models import Q
+from django.core.paginator import Paginator, InvalidPage
+
+ITEMS_PER_PAGE = 3
 
 def main_page(request):
-    shared_bookmarks = SharedBookmark.objects.order_by('-date')[:10]
+    shared_bookmarks = SharedBookmark.objects.order_by('-date')
     variables = RequestContext(request, 
         {'shared_bookmarks': shared_bookmarks }
         )
@@ -22,12 +25,32 @@ def main_page(request):
 	
 def user_page(request, username):
     user = get_object_or_404(User, username=username)
-    bookmarks = user.bookmark_set.order_by('-id')
+    query_set = user.bookmark_set.order_by('-id')
+    paginator = Paginator(query_set, ITEMS_PER_PAGE)
+    try:
+        page_number = int(request.GET['page'])
+    except (KeyError, ValueError):
+        page_number = 1
+    try:
+        page = paginator.page(page_number)
+    except InvalidPage:
+        raise Http404
+        
+    bookmarks = page.object_list
+    
+    # bookmarks = user.bookmark_set.order_by('-id')
     variables = RequestContext(request, {
+        'bookmarks': bookmarks,
         'username': username,
 		'show_tags': True,
 		'show_edit': username == request.user.username,
-        'bookmarks': bookmarks,
+		'show_paginator': paginator.num_pages > 1,
+		'has_prev': page.has_previous(),
+		'has_next': page.has_next(),
+		'page': page_number,
+		'pages': paginator.num_pages,
+		'next_page': page_number + 1,
+		'prev_page': page_number -1 
     })
     return render_to_response('user_page.html', variables)
 

@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block head %}
 <a href="/vote/?id={{ shared_bookmark.id }}" class="vote">[+]</a>
-<a href="http://{{ shared_bookmark.bookmark.link.url }}" class="title">
+<a href="{{ shared_bookmark.bookmark.link.url }}" class="title">
 	{{ shared_bookmark.bookmark.title }}
 </a>
 {% endblock head %}
