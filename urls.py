@@ -25,6 +25,9 @@ urlpatterns = patterns('',
 	(r'^search/$', search_page),
 	(r'^bookmark/(\d+)/$', bookmark_page),
 	
+	#friends 
+	(r'^friends/(\w+)/$', friends_page),
+	
 	# Admin interface (chap 8)
 	# (r'^admin/(.*)', admin.site.root),
 	# fixed via         stackoverflow.com/questions/5503616/how-to-correct-this-error-adminsite-object-has-no-attribute-root
