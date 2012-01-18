@@ -1,0 +1,9 @@
+Hi {{ name }},
+
+{{ sender }} invited you to join Django Bookmarks, a website where you can post and share you bookmarks with friends!
+
+To accept the invitation, click on the link below:
+
+{{ link }}
+
+--Django Bookmarks Team
