@@ -143,3 +143,11 @@ LOGGING = {
 }
 
 LOGIN_URL = '/login/'
+
+# Chapter 10 mailing invites
+SITE_HOST = '127.0.0.1:8000'
+DEFAULT_FROM_EMAIL = 'Django Bookmarks <django.bookmarks@example.com>'
+EMAIL_HOST = 'mail.yourisp.net'
+EMAIL_PORT = ''
+EMAIL_HOST_USER = 'HOST USER'
+EMAIL_HOST_PASSWORD = 'PASSWORD'
