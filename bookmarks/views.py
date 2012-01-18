@@ -27,6 +27,15 @@ def user_page(request, username):
     user = get_object_or_404(User, username=username)
     query_set = user.bookmark_set.order_by('-id')
     paginator = Paginator(query_set, ITEMS_PER_PAGE)
+    
+    if request.user.is_authenticated():
+        is_friend = Friendship.objects.filter(
+            from_friend=request.user,
+            to_friend=user
+        )
+    else:
+        is_friend = False
+    
     try:
         page_number = int(request.GET['page'])
     except (KeyError, ValueError):
@@ -50,7 +59,8 @@ def user_page(request, username):
 		'page': page_number,
 		'pages': paginator.num_pages,
 		'next_page': page_number + 1,
-		'prev_page': page_number -1 
+		'prev_page': page_number -1,
+		'is_friend': is_friend
     })
     return render_to_response('user_page.html', variables)
 
@@ -298,3 +308,20 @@ def friends_page(request, username):
         })
         
     return render_to_response('friends_page.html', variables)
+    
+@login_required
+def friend_add(request):
+    if 'username' in request.GET:
+        friend = get_object_or_404(
+            User, username=request.GET['username']
+        )
+        friendship = Friendship(
+            from_friend=request.user,
+            to_friend=friend
+        )
+        friendship.save()
+        return HttpResponseRedirect(
+            '/friends/%s/' % request.user.username
+        )
+    else:
+        raise Http404
