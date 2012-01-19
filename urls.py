@@ -29,6 +29,7 @@ urlpatterns = patterns('',
 	(r'^friends/(\w+)/$', friends_page),
 	(r'^friend/add/$', friend_add),
 	(r'^friend/invite/$', friend_invite),
+	(r'^friend/accept/(\w+)/$', friend_accept),
 	
 	# Admin interface (chap 8)
 	# (r'^admin/(.*)', admin.site.root),

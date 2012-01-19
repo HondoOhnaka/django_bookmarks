@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime, timedelta
 from django.db.models import Q
 from django.core.paginator import Paginator, InvalidPage
+import smtplib
 
 ITEMS_PER_PAGE = 3
 
@@ -76,7 +77,31 @@ def register_page(request):
 				username = form.cleaned_data['username'],
 				password = form.cleaned_data['password1'],
 				email = form.cleaned_data['email']
-			)
+		    )
+		    
+			if 'invitation' in request.session:
+				# retrieve the invitation object
+				invitation = Invitation.objects.get(
+					id=request.session['invitation']
+				)
+
+				# create friendship from user to sender
+				friendship = Friendship(
+				   from_friend = user,
+				   to_friend = invitation.sender
+				)
+				friendship.save()
+
+				# create friendship from sender to user
+				friendship = Friendship(
+				   from_friend = invitation.sender,
+				   to_friend = user
+				)
+				friendship.save()
+
+				# delete this invite from the db and session
+				invitation.delete()
+				del request.session['invitation']
 			return HttpResponseRedirect('/register/success/')
 	else:
 		form = RegistrationForm()
@@ -319,7 +344,17 @@ def friend_add(request):
             from_friend=request.user,
             to_friend=friend
         )
-        friendship.save()
+        try:
+            friendship.save()
+            request.user.message_set.create(
+                message=u'%s was added to your friend list.' %
+                    friend.username
+            )
+        except:
+            request.user.message_set.create(
+                message=u'%s is already a friend of yours.' % 
+                    friend.username
+            )
         return HttpResponseRedirect(
             '/friends/%s/' % request.user.username
         )
@@ -339,7 +374,16 @@ def friend_invite(request):
                 sender=request.user
             )
             invitation.save()
-            invitation.send()
+            try:
+            	invitation.send()
+            	request.user.message_set.create(
+            		message=u'An invitation was sent to %s.' % invitation.email
+            	)
+            except smtplib.SMTPException:
+            	request.user.message_set.create(
+            		message = u'An error happened when sending the invitation.'
+            	)
+				
             return HttpResponseRedirect('/friend/invite/')
     else:
         form = FriendInviteForm()
@@ -347,3 +391,8 @@ def friend_invite(request):
             'form': form
         })
         return render_to_response('friend_invite.html', variables)
+        
+def friend_accept(request, code):
+    invitation = get_object_or_404(Invitation, code__exact=code)
+    request.session['invitation'] = invitation.id
+    return HttpResponseRedirect('/register/')

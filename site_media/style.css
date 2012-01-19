@@ -30,3 +30,10 @@ textarea { display: block; }
     padding: 5px; 
     border: 1px solid #000;
 }
+
+/* chap 10 messaging */
+ul.messages {
+	border: 1px dashed #000;
+	margin: 1em 4em;
+	padding: 1em;
+}
