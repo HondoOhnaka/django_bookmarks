@@ -146,8 +146,8 @@ LOGIN_URL = '/login/'
 
 # Chapter 10 mailing invites
 SITE_HOST = '127.0.0.1:8000'
-DEFAULT_FROM_EMAIL = 'Django Bookmarks <django@greatbabysleep.com>'
-EMAIL_HOST = 'mail.tigertech.net'
+DEFAULT_FROM_EMAIL = 'Django Bookmarks <django@bookmarks.com>'
+EMAIL_HOST = 'mail.yourisp.net'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'django@greatbabysleep.com'
-EMAIL_HOST_PASSWORD = 'django1'
+EMAIL_HOST_USER = 'test@test.com'
+EMAIL_HOST_PASSWORD = 'your password'
